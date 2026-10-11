@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" role="img" aria-label="Specta symbol">
+  <g fill="none" stroke="#F7CC2B" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M500 165V45h58l365 218v190" stroke-width="58"/>
+    <path d="M77 456v257l423 242V835" stroke-width="58"/>
+    <polygon points="500,165 790,335 790,675 500,845 210,675 210,335" stroke-width="14"/>
+  </g>
+  <circle cx="77" cy="456" r="42" fill="#F7CC2B"/>
+  <circle cx="923" cy="453" r="42" fill="#F7CC2B"/>
+  <path fill="#F7CC2B" d="M451 625h-66l89-250h53l89 250h-67l-14-44h-70l-14 44Zm29-96h39l-20-65-19 65Z"/>
+</svg>
