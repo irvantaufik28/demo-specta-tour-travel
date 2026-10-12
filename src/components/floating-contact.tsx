@@ -1,13 +1,15 @@
-const instagramUrl = "https://www.instagram.com/spectatravel/";
-const whatsappUrl =
-  "https://wa.me/6282339593295?text=Halo%20Specta%2C%20saya%20ingin%20bertanya%20tentang%20perjalanan.";
+import { getSiteSettings } from "@/lib/cms/content";
+import { buildWhatsAppUrl, instagramUrl } from "@/lib/cms/contact";
 
-export default function FloatingContact() {
+export default async function FloatingContact() {
+  const settings = await getSiteSettings();
+  const instagram = instagramUrl(settings?.instagram);
+  const whatsapp = buildWhatsAppUrl(settings?.whatsapp);
   return (
     <aside className="floating-contact" aria-label="Kontak cepat">
       <a
         className="floating-contact__button floating-contact__instagram"
-        href={instagramUrl}
+        href={instagram}
         target="_blank"
         rel="noreferrer"
         aria-label="Buka Instagram Specta Travel"
@@ -21,7 +23,7 @@ export default function FloatingContact() {
 
       <a
         className="floating-contact__button floating-contact__whatsapp"
-        href={whatsappUrl}
+        href={whatsapp}
         target="_blank"
         rel="noreferrer"
         aria-label="Hubungi Specta Travel melalui WhatsApp"
