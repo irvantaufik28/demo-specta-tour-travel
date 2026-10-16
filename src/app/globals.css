@@ -211,8 +211,21 @@ footer>small{font-size:10px}
 }
 
 .floating-contact__whatsapp {
-  background: #22c968;
+  background: linear-gradient(145deg, #2ee374 0%, #19b95b 100%);
+  box-shadow: 0 12px 30px rgba(18, 151, 76, 0.32);
   animation-delay: -2.2s;
+}
+
+.floating-contact__whatsapp:hover {
+  box-shadow: 0 16px 36px rgba(18, 151, 76, 0.4);
+}
+
+.floating-contact__whatsapp svg {
+  width: 29px;
+  height: 29px;
+  fill: currentColor;
+  stroke: none;
+  filter: drop-shadow(0 1px 1px rgba(4, 70, 33, 0.16));
 }
 
 @keyframes floating-contact-enter {
@@ -251,6 +264,11 @@ footer>small{font-size:10px}
   .floating-contact__button svg {
     width: 24px;
     height: 24px;
+  }
+
+  .floating-contact__whatsapp svg {
+    width: 26px;
+    height: 26px;
   }
 }
 
