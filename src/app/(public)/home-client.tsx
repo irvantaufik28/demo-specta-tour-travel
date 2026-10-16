@@ -16,6 +16,23 @@ const heroSlides = [
   { place: "Malaysia", region: "Southeast Asia", image: "https://images.unsplash.com/photo-1596422846543-75c6fc197f07?auto=format&fit=crop&w=2200&q=90" },
 ];
 
+const departureCampaigns = [
+  { id: "dufan-oct-2026", month: "2026-10", date: "2026-10-25", dateLabel: "25 Okt 2026", name: "Open Trip Dufan", category: "Domestik", duration: "1 hari", departureFrom: "Garut", seats: 4 },
+  { id: "thailand-nov-2026", month: "2026-11", date: "2026-11-14", dateLabel: "14 Nov 2026", name: "Thailand Highlights", category: "Mancanegara", duration: "6H5M", departureFrom: "Bandung", seats: 10 },
+  { id: "bali-nov-2026", month: "2026-11", date: "2026-11-28", dateLabel: "28 Nov 2026", name: "Bali & Nusa Penida", category: "Domestik", duration: "4H3M", departureFrom: "Garut", seats: 0 },
+  { id: "singapore-dec-2026", month: "2026-12", date: "2026-12-12", dateLabel: "12 Des 2026", name: "Singapore City Escape", category: "Mancanegara", duration: "4H3M", departureFrom: "Bandung", seats: 8 },
+  { id: "bromo-dec-2026", month: "2026-12", date: "2026-12-29", dateLabel: "29 Des 2026", name: "Bromo Year End", category: "Domestik", duration: "4H3M", departureFrom: "Garut", seats: 0 },
+];
+
+const departureMonths = [
+  { value: "all", label: "Semua jadwal" },
+  { value: "2026-10", label: "Oktober 2026" },
+  { value: "2026-11", label: "November 2026" },
+  { value: "2026-12", label: "Desember 2026" },
+];
+
+const departureCategories = ["Semua", "Domestik", "Mancanegara"];
+
 interface HomePageClientProps {
   hero: {
     eyebrow: string;
@@ -27,6 +44,13 @@ interface HomePageClientProps {
 
 export default function Home({ hero, whatsappUrl }: HomePageClientProps) {
   const [activeHero, setActiveHero] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const visibleDepartures = departureCampaigns.filter((campaign) => {
+    const matchesMonth = selectedMonth === "all" || campaign.month === selectedMonth;
+    const matchesCategory = selectedCategory === "Semua" || campaign.category === selectedCategory;
+    return matchesMonth && matchesCategory;
+  });
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -78,6 +102,96 @@ export default function Home({ hero, whatsappUrl }: HomePageClientProps) {
             <div><b>02</b><span>Ticket &<br />Hotel</span></div>
             <div><b>03</b><span>Transport &<br />Assistance</span></div>
           </div>
+        </div>
+      </section>
+
+      <section className="departures section" id="jadwal">
+        <div className="departure-heading">
+          <div>
+            <span className="eyebrow"><i /> Data contoh untuk presentasi</span>
+            <h2>Jadwal keberangkatan terdekat</h2>
+          </div>
+          <p>Pilih bulan keberangkatan untuk melihat campaign open trip yang tersedia.</p>
+        </div>
+
+        <div className="departure-panel">
+          <div className="departure-months" aria-label="Filter bulan keberangkatan">
+            {departureMonths.map((month) => {
+              const count = month.value === "all"
+                ? departureCampaigns.length
+                : departureCampaigns.filter((campaign) => campaign.month === month.value).length;
+              return (
+                <button
+                  className={selectedMonth === month.value ? "active" : ""}
+                  type="button"
+                  aria-pressed={selectedMonth === month.value}
+                  onClick={() => setSelectedMonth(month.value)}
+                  key={month.value}
+                >
+                  <strong>{month.label}</strong>
+                  <span>{count} jadwal</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="departure-categories" aria-label="Filter kategori perjalanan">
+            {departureCategories.map((category) => (
+              <button
+                className={selectedCategory === category ? "active" : ""}
+                type="button"
+                aria-pressed={selectedCategory === category}
+                onClick={() => setSelectedCategory(category)}
+                key={category}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
+          <div className="departure-legend">
+            <div><span><i className="available" /> Tersedia, dapat ditanyakan</span><span><i className="full" /> Penuh, pilih jadwal lain</span></div>
+            <strong>{visibleDepartures.length} keberangkatan ditampilkan</strong>
+          </div>
+        </div>
+
+        <div className="departure-list" aria-live="polite">
+          {visibleDepartures.map((campaign) => {
+            const [day, month, year] = campaign.dateLabel.split(" ");
+            return (
+              <article className={`departure-row${campaign.seats === 0 ? " is-full" : ""}`} key={campaign.id}>
+                <div className="departure-date">
+                  <time dateTime={campaign.date}><strong>{day}</strong><span>{month}</span></time>
+                  <small>{year}</small>
+                </div>
+                <div className="departure-trip">
+                  <span className={`departure-category ${campaign.category.toLowerCase()}`}>{campaign.category}</span>
+                  <h3>{campaign.name}</h3>
+                  <p>{campaign.duration} · Berangkat dari {campaign.departureFrom}</p>
+                </div>
+                <div className="departure-availability">
+                  <span className={`departure-seats${campaign.seats === 0 ? " full" : ""}`}>
+                    {campaign.seats === 0 ? "Penuh" : `Tersisa ${campaign.seats} kursi`}
+                  </span>
+                  <small>{campaign.seats === 0 ? "Pilih keberangkatan lain" : "Konfirmasi kepada admin"}</small>
+                </div>
+                <div className="departure-action-cell">
+                  {campaign.seats === 0 ? (
+                    <span className="departure-action departure-action-full">Lihat jadwal lain <span aria-hidden="true">→</span></span>
+                  ) : (
+                    <span className="departure-action">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M5.4 17.2 4 21l4.2-1.2A8.5 8.5 0 1 0 5.4 17.2Z" />
+                        <path d="M8 10h8M8 14h5" />
+                      </svg>
+                      Tanya ketersediaan
+                    </span>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+          {visibleDepartures.length === 0 && <p className="departure-empty">Belum ada jadwal untuk filter ini.</p>}
         </div>
       </section>
 
